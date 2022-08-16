@@ -1,1 +1,0 @@
-print("calculo imposto de renda")
