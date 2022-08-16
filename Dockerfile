@@ -14,5 +14,5 @@ COPY . /app
 
 EXPOSE 8000
 STOPSIGNAL SIGINT
-ENTRYPOINT ["python3"]
-#CMD ["runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["python"]
+CMD ["python", "app.py"]
