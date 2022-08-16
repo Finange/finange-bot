@@ -9,5 +9,8 @@ while True:
 
     resultado = requests.get(url_base)
 
-    print(resultado.json())
+    try:
+        print(resultado.json())
+    except requests.exceptions.ConnectionError:
+        print("Error : {}".format(resultado.status_code))
     time.sleep(10) 
