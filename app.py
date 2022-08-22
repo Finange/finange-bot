@@ -3,18 +3,18 @@ import json
 import time
 import os
 
+from .app.setup.core import TelegramBot
+
 while True:
     TOKEN = os.environ.get("TOKEN")
     CHAT_ID = os.environ.get("CHAT_ID")
     text = "atilio ama dálete"
-    url_base = f"https://api.telegram.org/bot5466302728:AAGhs-IYaNzG1ssl518_LJCgKdRM6AvfOCk/getUpdates?timeout=100"
+    url_base = f"https://api.telegram.org/bot5466302728:AAGhs-IYaNzG1ssl518_LJCgKdRM6AvfOCk/getUpdates"
 
-    resultado = requests.get(url_base)
+    bot = TelegramBot
 
     try:
-        print(resultado.json())    
-        print(resultado.status_code)
-        print(resultado.text)
+        print(bot.see_information(url_base))
     except requests.exceptions.ConnectionError:
-        print("Error : {}".format(resultado.status_code))
+        print(f'deu')
     time.sleep(1) 

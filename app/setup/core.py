@@ -1,4 +1,5 @@
 import os
+import requests
 
 class TelegramBot:
     def __init__(self):
