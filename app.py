@@ -3,18 +3,33 @@ import json
 import time
 import os
 
-from .app.setup.core import TelegramBot
+class TelegramBot:
+    def __init__(self):
+        token = os.environ.get("TOKEN")
+        self.url_base = f"api.telegram.org/bot{token}/"
 
-while True:
-    TOKEN = os.environ.get("TOKEN")
-    CHAT_ID = os.environ.get("CHAT_ID")
-    text = "atilio ama dálete"
-    url_base = f"https://api.telegram.org/bot5466302728:AAGhs-IYaNzG1ssl518_LJCgKdRM6AvfOCk/getUpdates"
+    def iniciarBot(self):
+        update_id = None
 
-    bot = TelegramBot
+    def pegarMensagensDoUsuario(self, update_id):
+        try:
+            link_request = f"{self.url_base}/getUpdates?timeout=100"
+        except requests.exceptions.ConnectionError:
+            print(f"Error : {self.url_base.status_code}.")
+            time.sleep(2)
 
-    try:
-        print(bot.see_information(url_base))
-    except requests.exceptions.ConnectionError:
-        print(f'deu')
-    time.sleep(1) 
+    def testandoConexao(self, update_id):
+        # TODO - Implementar um numero maximo de tentativas de conexão para evitar lentidão no bot
+        while self.url_base.status_code != 200:
+            if self.url_base.status_code != 404:
+                print("Retrying....")
+                self.getStartedBot(self)
+                self.get_messages_from_user(self, update_id)
+                return
+
+            else:
+                print(f"Invalid Token: {self.token}")
+            time.sleep(4)
+
+            if self.url_base.status_code == 200:
+              return 
