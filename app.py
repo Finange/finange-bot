@@ -1,7 +1,6 @@
-import requests
-import json
 import time
-import os
+import requests
+import os 
 
 class TelegramBot:
     def __init__(self):
