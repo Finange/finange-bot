@@ -1,35 +1,34 @@
 import time
 import requests
 import os 
+import telegram.ext
 
-class TelegramBot:
-    def __init__(self):
-        token = os.environ.get("TOKEN")
-        self.url_base = f"api.telegram.org/bot{token}/"
+API_TOKEN = os.environ.get("API_TOKEN")
+
+def start(update, context):
+    update.message.reply_text("""
+    Olá, eu sou o Finange, seu Bot Financeiro! 
+
+    Sou capaz de calcular seus impostos e organizar sua vida financeira!
+
+    Vamos começar?
+    
+    Esses são os impostos que nosso Bot consegue calcular:
+
+    /renda -> Calculo do Imposto de renda
+    /clt -> Calculo da rescisão do CLT
+    
+
+    Com esse comando você consegue ver meu poder financeiro:
+
+    /financeiro -> Ajudar você a ser uma pessoa sensata com dinheiro
+    """)
 
 
-    def iniciarBot(self):
-        update_id = None
+updater = telegram.ext.Updater(API_TOKEN, use_context=True)
+disp = updater.dispatcher
 
-    def pegarMensagensDoUsuario(self, update_id):
-        try:
-            link_request = f"{self.url_base}/getUpdates?timeout=100"
-        except requests.exceptions.ConnectionError:
-            print(f"Error : {self.url_base.status_code}.")
-            time.sleep(2)
+disp.add_handler(telegram.ext.CommandHandler("start", start))
 
-    def testandoConexao(self, update_id):
-        # TODO - Implementar um numero maximo de tentativas de conexão para evitar lentidão no bot
-        while self.url_base.status_code != 200:
-            if self.url_base.status_code != 404:
-                print("Retrying....")
-                self.getStartedBot(self)
-                self.get_messages_from_user(self, update_id)
-                return
-
-            else:
-                print(f"Invalid Token: {self.token}")
-            time.sleep(4)
-
-            if self.url_base.status_code == 200:
-              return 
+updater.start_polling()
+updater.idle()
