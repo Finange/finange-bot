@@ -21,3 +21,11 @@ Agora, ele vai precisar instalar tais dependências, basta você rodar o comando
 PRONTO! Agora você já pode contribuir com nosso Finange Bot adicionando features ou corrigindo bugs!
 
 Obrigado pela sua contribuição!
+
+## O que preciso saber do código?
+
+Primeiro, você precisa saber que usamos a linguagem de programação <a href="https://www.python.org/">python</a> e é tudo codificado sem usar nenhum tipo de framework.
+
+Porém, usamos uma biblioteca para abstrair os metódos de conexão com o Telegram - que usamos para nosso Bot funcionar. E essa biblioteca é a <a href="https://docs.python-telegram-bot.org/en/stable/telegram.ext.html">python-telegram-bot</a>. Qualquer dúvida sobre os metódos que usamos para fazer o Bot funcionar, basta ler essa documentação no link anterior ou abrir uma <a href="https://github.com/Finange/finange-bot/issues/new/choose">issue </a> no nosso repositorio. Sinta-se a vontade e NÃO precisa ter vergonha.
+
+Toda dúvida é válida!
