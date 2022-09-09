@@ -2,6 +2,9 @@ import time
 import requests
 import os 
 import telegram.ext
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_TOKEN = os.environ.get("API_TOKEN")
 
