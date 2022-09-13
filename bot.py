@@ -1,20 +1,13 @@
-import os
-
 from app.tax.brazil.impostos import calculo_imposto_de_renda
-import telegram.ext
-from telegram.message import Message
+from telegram.ext import Application, CommandHandler, \
+ MessageHandler, ContextTypes, filters, ConversationHandler
+from telegram import Update
 
-from dotenv import load_dotenv
-
-# Carrega o arquivo .env que contém o Token
-load_dotenv()
-
-# Pega o path do Token
-API_TOKEN = os.environ.get("API_TOKEN")
+RENDA = range(1)
 
 
-def start(update, context) -> Message:
-    return update.message.reply_text("""
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("""
     Olá, eu sou o Finange, seu Bot Financeiro!
 
     Sou capaz de calcular seus impostos e organizar sua vida financeira!
@@ -33,33 +26,56 @@ def start(update, context) -> Message:
     """)
 
 
-def text(update, context) -> Message:
-    return update.message.reply_text("""
+async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    await update.message.reply_text("""
+
+    Hmmm! Então você quer que eu calcule seu imposto de renda?
+
+    Ok! Vamos lá.
+
+    Me diga, quanto você ganha?
+
+    Digite /cancel caso queira parar o cálculo.
+    """)
+    return RENDA
+
+
+async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("""
     Para ver todos os comandos de cálculos clique aqui -> /start
     """)
+
+
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("""
+    Cálculo de renda cancelado!
+    """)
+
+    return ConversationHandler.END
 
 
 def main() -> None:
     """Começa o bot"""
 
-    # Atualizador do bot
-    updater = telegram.ext.Updater(API_TOKEN, use_context=True)
-    disp = updater.dispatcher
+    # Cria a aplicação e passa pro token do bot
+    app = Application.builder().token("TOKEN").build()
 
     # Comandos
-    disp.add_handler(telegram.ext.CommandHandler("start", start))
-    disp.add_handler(telegram.ext.CommandHandler(
-        "renda", calculo_imposto_de_renda
-        )
+    app.add_handler(CommandHandler("start", start))
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler("renda", renda)],
+        states={
+            RENDA: [MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_imposto_de_renda)]
+        },
+        fallbacks=[CommandHandler("cancel", cancel)],
     )
+    app.add_handler(conv_handler)
 
-    # Texto
-    disp.add_handler(telegram.ext.MessageHandler(
-        telegram.ext.Filters.text & ~telegram.ext.Filters.command, text))
+    # Resposta para texto do user
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text))
 
     # Começa o bot
-    updater.start_polling()
-    updater.idle()
+    app.run_polling()
 
 
 if __name__ == "__main__":
