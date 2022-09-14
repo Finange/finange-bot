@@ -8,7 +8,11 @@ Primeiro, você vai precisar criar um Bot no seu telegram. Você ver como faz is
 
 Logo, a forma mais segura de existir esse projeto no formato Open Source é você criar um Bot de simulação, em que você vai rodar o nosso código no seu próprio Bot, testar, ver tudo bonitinho dentro do seu próprio Bot, e, então, você sobe as features/correções para o Finange, entendeu?! Qualquer dúvida, só abrir um <a href="https://github.com/Finange/finange-bot/issues/new/choose"> issue </a> aqui no nosso repositorio que vamos tirar suas dúvidas!
 
-Agora que você já criou seu Bot, vai precisar criar um arquivo na raiz desse projeto chamado `.env`. Pra que? Simples! Lá vai ser o local que você vai guardar informações importantes do projeto, como o TOKEN do Bot - que você recebeu ao criá-lo no Telegram. Para guardar lá, você cria uma variavel chamada `API_TOKEN=<TOKEN>`, substituindo o `<TOKEN>` pelo Token que você recebeu do BotFather. 
+Agora que você já criou seu Bot, você vai precisar colar o Token no bot.py. Basta procucar a linha que contém este código:
+```
+app = Application.builder().token("TOKEN").build()
+```
+Com isso é só substituir o `TOKEN` pelo Token que você recebeu do BotFather.
 
 Dessa forma, você já consegue testar todo nosso código dentro da sua máquina, com seu Bot de simulação. 
 
