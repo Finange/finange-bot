@@ -1,1 +1,1 @@
-print("calculo imposto de renda na argentina")
+print('calculo imposto de renda na argentina')
