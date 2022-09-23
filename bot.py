@@ -6,7 +6,21 @@ from telegram import Update
 RENDA = range(1)
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Essa função serve para começar o bot, é nela que temos os exemplos de
+    outras funções que vão realizar os cálculos.
+
+    Args:
+        update: Esse update é o atualizador do bot, é ele que vai enviar as
+            mensagens, ou outras informações.
+        context: O context praticamente é usado para enviar mensagens e
+        realizar diversas tarefas, mas como não estamos usando ele nesse
+        projeto, não precisa se preocupar.
+    Return:
+        Basicamente a função não vai retornar nada, apenas vai enviar a
+        mensagem para o usuário através do argumento update.
+    """
     await update.message.reply_text("""
     Olá, eu sou o Finange, seu Bot Financeiro!
 
@@ -27,6 +41,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """
+    Essa função serve para inicializar as outras funções que vão receber
+    as mensagens do usuário para assim conseguir realizar o cálculo
+    do imposto de renda.
+
+    Return:
+        int: Essa função vai retornar um inteiro, que se refere a outra função
+        que vai receber o salário do usuário.
+    """
     await update.message.reply_text("""
 
     Hmmm! Então você quer que eu calcule seu imposto de renda?
@@ -40,13 +63,29 @@ async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return RENDA
 
 
-async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Essa função retorna uma simples mensagem caso o usuário envie
+    mensagens aleatórias.
+
+    Return:
+        Basicamente a função não vai retornar nada, apenas vai enviar a
+        mensagem para o usuário através do argumento update.
+    """
     await update.message.reply_text("""
     Para ver todos os comandos de cálculos clique aqui -> /start
     """)
 
 
-async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """
+    Essa função serve para cancelar o cálculo de renda, caso o usuário
+    não queira mais realizar o cálculo.
+
+    Return:
+        int: Essa função vai retornar um inteiro, a qual se refere a uma
+        constante que serve para encerrar uma conversa.
+    """
     await update.message.reply_text("""
     Cálculo de renda cancelado!
     """)
@@ -55,13 +94,17 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def main() -> None:
-    """Começa o bot"""
+    """
+    Essa é a principal função, é nela que vamos rodar todas as outras funções
+    dependentes, para enfim rodar o bot.
+    """
 
     # Cria a aplicação e passa pro token do bot
-    app = Application.builder().token("TOKEN").build()
+    app = Application.builder().token("5786477338:AAHYaJXn6_Nf5vx6kyHdNg49C_VkXd5y6HE").build()
 
     # Comandos
     app.add_handler(CommandHandler("start", start))
+
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("renda", renda)],
         states={
