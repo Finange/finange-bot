@@ -100,7 +100,7 @@ def main() -> None:
     """
 
     # Cria a aplicação e passa pro token do bot
-    app = Application.builder().token("5786477338:AAHYaJXn6_Nf5vx6kyHdNg49C_VkXd5y6HE").build()
+    app = Application.builder().token("TOKEN").build()
 
     # Comandos
     app.add_handler(CommandHandler("start", start))
