@@ -33,3 +33,13 @@ Primeiro, você precisa saber que usamos a linguagem de programação <a href="h
 Porém, usamos uma biblioteca para abstrair os metódos de conexão com o Telegram - que usamos para nosso Bot funcionar. E essa biblioteca é a <a href="https://docs.python-telegram-bot.org/en/stable/telegram.ext.html">python-telegram-bot</a>. Qualquer dúvida sobre os metódos que usamos para fazer o Bot funcionar, basta ler essa documentação no link anterior ou abrir uma <a href="https://github.com/Finange/finange-bot/issues/new/choose">issue </a> no nosso repositorio. Sinta-se a vontade e NÃO precisa ter vergonha.
 
 Toda dúvida é válida!
+
+## Onde entrar em contato e obter ajuda sobre o projeto?
+
+Para contribuir e organizar melhor as implementações do projeto você pode entrar em nosso **grupo
+no [Telegram](https://t.me/+cFJ8upuJ5GQzZmE5)**.
+
+> Para entrar no grupo é só clicar no texto "Telegram" acima.
+
+**Todo domingo às 12h (meio dia no horário de Brasília) temos uma call no grupo**, para que
+os contribuidores do projeto possam se comunicar e trocar informações.
