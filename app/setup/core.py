@@ -1,5 +1,9 @@
+from locale import LC_ALL, currency, setlocale
+
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
+
+setlocale(LC_ALL, 'pt_BR.UTF-8')
 
 RENDA = range(1)
 
@@ -41,6 +45,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     /renda -> Calculo do Imposto de renda
     /clt -> Calculo da rescisão do CLT
+    /inss -> Calculo da contribuição do INSS
 
 
     Com esse comando você consegue ver meu poder financeiro:
@@ -100,7 +105,8 @@ async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"""
-    Certo, sua renda mensal era de {msg_salario_clt}!
+    Certo, sua renda mensal era de \
+{currency(float(msg_salario_clt), grouping=True) if msg_salario_clt.isnumeric() else f"{msg_salario_clt}"}!
 
     Agora, digite a quantidade de dependentes.
         """
@@ -165,6 +171,32 @@ async def clt_demissao(update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
     )
     return ConversationHandler.END
+
+
+# Função para cálculo da contribuição do INSS
+async def inss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """
+    Essa função serve para inicializar as outras funções que vão receber
+    as mensagens do usuário para assim conseguir realizar o cálculo
+    de contribuição do INSS.
+
+    Return:
+        int: Essa função vai retornar um inteiro, que se refere a outra função
+        que vai receber o salário do usuário.
+    """
+    await update.message.reply_text(
+        """
+
+    Ok! Então você deseja que eu calcule sua contribuição ao INSS?
+
+    Ok! Vamos lá.
+
+    Me diga, quanto você ganha?
+
+    Digite /cancel caso queira parar o cálculo.
+    """
+    )
+    return RENDA
 
 
 # Função para mensagem aleatória do usuário
