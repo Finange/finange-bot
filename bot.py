@@ -7,24 +7,25 @@ from telegram.ext import (
 )
 
 from app.setup.core import (
+    DATA_CLT,
+    DEMISSAO_CLT,
+    FERIAS_CLT,
+    QTD_CLT,
     RENDA,
     SALARIO_CLT,
-    QTD_CLT,
-    DATA_CLT,
-    FERIAS_CLT,
-    DEMISSAO_CLT,
     cancel,
+    clt,
+    clt_data,
+    clt_demissao,
+    clt_ferias,
+    clt_quantidade,
+    clt_salario,
+    inss,
     renda,
     start,
     text,
-    clt,
-    clt_salario,
-    clt_quantidade,
-    clt_data,
-    clt_ferias,
-    clt_demissao,
 )
-from app.tax.brazil.impostos import calculo_imposto_de_renda
+from app.tax.brazil.impostos import calculo_imposto_de_renda, calculo_inss
 
 
 def main() -> None:
@@ -82,6 +83,18 @@ def main() -> None:
         fallbacks=[CommandHandler('cancel', cancel)],
     )
     app.add_handler(conv_clt_handler)
+
+    # Comando que vai realizar o cálculo da contribuição do INSS
+    conv_inss_handler = ConversationHandler(
+        entry_points=[CommandHandler('inss', inss)],
+        states={
+            RENDA: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_inss)
+            ]
+        },
+        fallbacks=[CommandHandler('cancel', cancel)],
+    )
+    app.add_handler(conv_inss_handler)
 
     # Resposta para texto do user
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text))
