@@ -22,7 +22,7 @@ def main() -> None:
     # Cria a aplicação e passa pro token do bot
     app = (
         Application.builder()
-        .token('5500683258:AAE4ULyBSLsex4vjP-I54_JjrFaZ3_yZLeg')
+        .token('TOKEN')
         .build()
     )
 
