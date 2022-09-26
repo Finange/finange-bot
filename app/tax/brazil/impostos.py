@@ -1,9 +1,7 @@
-from locale import LC_ALL, currency, setlocale
+from locale import currency
 
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
-
-setlocale(LC_ALL, 'pt_BR.UTF-8')
 
 
 async def calculo_imposto_de_renda(
@@ -29,7 +27,9 @@ async def calculo_imposto_de_renda(
     return ConversationHandler.END
 
 
-async def calculo_inss(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def calculo_inss(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+):
     """
     Essa função está recebendo a mensagem do usuário a qual foi passada na
     função 'inss'. A função irá retornar o valor para pagamento
