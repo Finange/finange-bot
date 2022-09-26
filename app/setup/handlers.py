@@ -2,7 +2,7 @@ from telegram.ext import (
     CommandHandler,
     ConversationHandler,
     MessageHandler,
-    filters,
+    filters
 )
 
 from app.setup.core import (
@@ -22,7 +22,7 @@ from app.setup.core import (
     clt_quantidade,
     clt_salario,
     inss,
-    renda,
+    renda
 )
 from app.tax.brazil.impostos import calculo_imposto_de_renda, calculo_inss
 
