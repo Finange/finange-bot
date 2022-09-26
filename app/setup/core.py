@@ -1,11 +1,10 @@
-from locale import LC_ALL, currency, setlocale
+from locale import currency
 
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 
-setlocale(LC_ALL, 'pt_BR.UTF-8')
-
 RENDA = range(1)
+INSS = range(1)
 
 # Rescisão CLT
 SALARIO_CLT, QTD_CLT, DATA_CLT, FERIAS_CLT, DEMISSAO_CLT = range(5)
@@ -18,7 +17,9 @@ msg_salario_clt, msg_quantidade_clt, msg_data_clt, msg_demissao_clt = (
 
 
 # Função para começar o bot
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> None:
     """
     Essa função serve para começar o bot, é nela que temos os exemplos de
     outras funções que vão realizar os cálculos.
@@ -55,7 +56,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 
-async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def renda(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> int:
     """
     Essa função serve para inicializar as outras funções que vão receber
     as mensagens do usuário para assim conseguir realizar o cálculo
@@ -81,7 +84,9 @@ async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 # Funções para o cálculo da rescisão do CLT
-async def clt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def clt(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> int:
     """
     Essa função serve para inicializar as outras funções que vão receber
     as mensagens do usuário para assim conseguir realizar o cálculo
@@ -99,7 +104,9 @@ async def clt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return SALARIO_CLT
 
 
-async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clt_salario(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+):
     global msg_salario_clt
     msg_salario_clt = update.message.text
 
@@ -114,7 +121,9 @@ async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return QTD_CLT
 
 
-async def clt_quantidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clt_quantidade(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+):
     global msg_quantidade_clt
     msg_quantidade_clt = update.message.text
 
@@ -130,7 +139,9 @@ async def clt_quantidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return DATA_CLT
 
 
-async def clt_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clt_data(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+):
     global msg_data_clt
     msg_data_clt = update.message.text.split()
 
@@ -145,7 +156,9 @@ async def clt_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return FERIAS_CLT
 
 
-async def clt_ferias(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clt_ferias(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+):
     global msg_ferias_clt
     msg_ferias_clt = update.message.text
 
@@ -159,7 +172,9 @@ async def clt_ferias(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return DEMISSAO_CLT
 
 
-async def clt_demissao(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clt_demissao(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+):
     global msg_demissao_clt
     msg_demissao_clt = update.message.text
 
@@ -174,7 +189,9 @@ async def clt_demissao(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # Função para cálculo da contribuição do INSS
-async def inss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def inss(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> int:
     """
     Essa função serve para inicializar as outras funções que vão receber
     as mensagens do usuário para assim conseguir realizar o cálculo
@@ -196,11 +213,13 @@ async def inss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     Digite /cancel caso queira parar o cálculo.
     """
     )
-    return RENDA
+    return INSS
 
 
 # Função para mensagem aleatória do usuário
-async def text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def text(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> None:
     """
     Essa função retorna uma simples mensagem caso o usuário envie
     mensagens aleatórias.
@@ -217,7 +236,9 @@ async def text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 # Função para parar os cálculos
-async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def cancel(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> int:
     """
     Essa função serve para cancelar qualquer cálculo que esteja sendo
     realizado, caso o usuário não queira mais realizar o cálculo.
