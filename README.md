@@ -2,6 +2,16 @@
 
 ## Como Contribuir
 
+> Antes de continuar a leitura, para ter **acesso à documentação completa** do projeto, **links** dos 
+> repositórios do Front-End e Back-End (este que você está agora é parte do Back-End, contando 
+> com o repo da API) e um **passo a passo** para contribuir, você pode acessar os dois links
+> abaixo:
+>
+> [Documentação completa](https://github.com/Finange/finange-documentation#readme)
+> \
+> [Passo a passo para contribuição](https://github.com/fl1pe/first-contributions/blob/main/translations/README.pt_br.md#primeiras-contribui%C3%A7%C3%B5es)
+
+
 Primeiro, você vai precisar criar um Bot no seu telegram. Você ver como faz isso <a href="https://help.huggy.io/telegram-bot/como-configurar-o-telegram-bot">aqui</a>!
 
 "Ah, mas por que eu preciso criar um Bot meu, sendo que quero contribuir pro Finange?"! Muito simples! Cada Bot do Telegram funciona por meio de um Token, então, para que você pudesse contribuir diretamente pro Finange, você precisaria ter o Token OFICIAL do Finange, e, por motivos de segurança, isso NÃO é uma opção.
