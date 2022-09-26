@@ -1,9 +1,9 @@
-from locale import LC_ALL, currency, setlocale
+from locale import currency
 
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 
-setlocale(LC_ALL, 'pt_BR.UTF-8')
+from app.setup.core import msg_salario_clt, msg_quantidade_clt, msg_data_clt, msg_demissao_clt
 
 
 async def calculo_imposto_de_renda(
@@ -18,11 +18,11 @@ async def calculo_imposto_de_renda(
         int: Essa função vai retornar um inteiro, a qual se refere a uma
         constante que serve para encerrar uma conversa.
     """
-    user = update.message.text
+    msg_renda = update.message.text
     await update.message.reply_text(
         f"""
     Entendi, então sua renda é \
-{currency(float(user), grouping=True) if user.isnumeric() else f"{user}"}
+{currency(float(msg_renda), grouping=True) if msg_renda.isnumeric() else f"{msg_renda}"}
     """
     )
 
@@ -73,6 +73,17 @@ async def calculo_inss(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Entendi, com sua renda de {currency(user, grouping=True)} \
 a sua contribuição será de {currency(contrib_inss, grouping=True)}
     """
+    )
+
+    return ConversationHandler.END
+
+
+async def calculo_clt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    saldo_salario = (float(msg_salario_clt) / 30) * (msg_data_clt[0][:2])
+    update.message.reply_text(
+        f"""
+    {saldo_salario}
+        """
     )
 
     return ConversationHandler.END

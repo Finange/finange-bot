@@ -13,6 +13,7 @@ from app.setup.core import (
     QTD_CLT,
     RENDA,
     SALARIO_CLT,
+    CALCULO_CLT,
     cancel,
     clt,
     clt_data,
@@ -25,7 +26,7 @@ from app.setup.core import (
     start,
     text,
 )
-from app.tax.brazil.impostos import calculo_imposto_de_renda, calculo_inss
+from app.tax.brazil.impostos import calculo_imposto_de_renda, calculo_inss, calculo_clt
 
 
 def main() -> None:
@@ -37,7 +38,7 @@ def main() -> None:
     # Cria a aplicação e passa pro token do bot
     app = (
         Application.builder()
-        .token('TOKEN')
+        .token('5786477338:AAHYaJXn6_Nf5vx6kyHdNg49C_VkXd5y6HE')
         .build()
     )
 
@@ -79,6 +80,9 @@ def main() -> None:
             DEMISSAO_CLT: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, clt_demissao)
             ],
+            CALCULO_CLT: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_clt)
+            ]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
