@@ -2,16 +2,18 @@ from telegram.ext import (
     CommandHandler,
     ConversationHandler,
     MessageHandler,
-    filters
+    filters,
 )
 
 from app.setup.core import (
+    CALCULO_CLT,
     DATA_CLT,
     DEMISSAO_CLT,
     FERIAS_CLT,
     QTD_CLT,
     RENDA,
     SALARIO_CLT,
+    calculo_clt,
     cancel,
     clt,
     clt_data,
@@ -22,7 +24,6 @@ from app.setup.core import (
     inss,
     renda,
 )
-
 from app.tax.brazil.impostos import calculo_imposto_de_renda, calculo_inss
 
 # Comando que vai realizar o cálculo do imposto de renda
@@ -48,14 +49,15 @@ conv_clt_handler = ConversationHandler(
         QTD_CLT: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, clt_quantidade)
         ],
-        DATA_CLT: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, clt_data)
-        ],
+        DATA_CLT: [MessageHandler(filters.TEXT & ~filters.COMMAND, clt_data)],
         FERIAS_CLT: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, clt_ferias)
         ],
         DEMISSAO_CLT: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, clt_demissao)
+        ],
+        CALCULO_CLT: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_clt)
         ],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
@@ -65,9 +67,7 @@ conv_clt_handler = ConversationHandler(
 conv_inss_handler = ConversationHandler(
     entry_points=[CommandHandler('inss', inss)],
     states={
-        RENDA: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_inss)
-        ]
+        RENDA: [MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_inss)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
