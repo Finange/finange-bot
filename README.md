@@ -18,13 +18,16 @@ Primeiro, você vai precisar criar um Bot no seu telegram. Você ver como faz is
 
 Logo, a forma mais segura de existir esse projeto no formato Open Source é você criar um Bot de simulação, em que você vai rodar o nosso código no seu próprio Bot, testar, ver tudo bonitinho dentro do seu próprio Bot, e, então, você sobe as features/correções para o Finange, entendeu?! Qualquer dúvida, só abrir um <a href="https://github.com/Finange/finange-bot/issues/new/choose"> issue </a> aqui no nosso repositorio que vamos tirar suas dúvidas!
 
-Agora que você já criou seu Bot, você vai precisar colar o Token no bot.py. Basta procucar a linha que contém este código:
-```
-app = Application.builder().token("TOKEN").build()
-```
-Com isso é só substituir o `TOKEN` pelo Token que você recebeu do BotFather.
+Agora que você já criou seu Bot, você vai precisar adicionar o Token em um arquivo .env. Siga os passos abaixo:
 
-Dessa forma, você já consegue testar todo nosso código dentro da sua máquina, com seu Bot de simulação. 
+> 1. Crie um arquivo .env no diretório do projeto.
+> 2. Adicione a seguinte linha de comando no arquivo.env e cole seu token dentro das aspas:
+> 
+>    ```TOKEN='<seu-token-do-bot>'```
+> 3. Agora é só rodar o bot.py
+
+
+E dessa forma, você já consegue testar todo nosso código dentro da sua máquina, com seu Bot de simulação. 
 
 Próxima etapa, você vai instalar o `poetry` na sua máquina usando esse <a href="https://python-poetry.org/docs/">link</a>!
 

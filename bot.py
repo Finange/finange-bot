@@ -1,14 +1,19 @@
-from telegram.ext import (
-    Application,
-    CommandHandler,
-    MessageHandler,
-    filters
+from locale import LC_ALL, setlocale
+from os import environ
+
+from dotenv import load_dotenv
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
+
+from app.setup.core import start, text
+from app.setup.handlers import (
+    conv_clt_handler,
+    conv_inss_handler,
+    conv_renda_handler,
 )
 
-from locale import LC_ALL, setlocale
+load_dotenv()
 
-from app.setup.core import (start, text)
-from app.setup.handlers import conv_renda_handler, conv_clt_handler, conv_inss_handler
+TOKEN = environ.get('TOKEN')
 
 
 def main() -> None:
@@ -20,11 +25,7 @@ def main() -> None:
     setlocale(LC_ALL, 'pt_BR.UTF-8')
 
     # Cria a aplicação e passa pro token do bot
-    app = (
-        Application.builder()
-        .token('TOKEN')
-        .build()
-    )
+    app = Application.builder().token(TOKEN).build()
 
     # Comandos
 

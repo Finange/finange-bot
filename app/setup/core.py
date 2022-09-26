@@ -7,19 +7,13 @@ RENDA = range(1)
 INSS = range(1)
 
 # Rescisão CLT
-SALARIO_CLT, QTD_CLT, DATA_CLT, FERIAS_CLT, DEMISSAO_CLT = range(5)
-msg_salario_clt, msg_quantidade_clt, msg_data_clt, msg_demissao_clt = (
-    None,
-    None,
-    None,
-    None,
+SALARIO_CLT, QTD_CLT, DATA_CLT, FERIAS_CLT, DEMISSAO_CLT, CALCULO_CLT = range(
+    6
 )
 
 
 # Função para começar o bot
-async def start(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> None:
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Essa função serve para começar o bot, é nela que temos os exemplos de
     outras funções que vão realizar os cálculos.
@@ -56,9 +50,7 @@ async def start(
     )
 
 
-async def renda(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> int:
+async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
     Essa função serve para inicializar as outras funções que vão receber
     as mensagens do usuário para assim conseguir realizar o cálculo
@@ -83,10 +75,16 @@ async def renda(
     return RENDA
 
 
+msg_salario_clt, msg_quantidade_clt, msg_data_clt, msg_demissao_clt = (
+    None,
+    None,
+    None,
+    None,
+)
+
+
 # Funções para o cálculo da rescisão do CLT
-async def clt(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> int:
+async def clt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
     Essa função serve para inicializar as outras funções que vão receber
     as mensagens do usuário para assim conseguir realizar o cálculo
@@ -104,16 +102,23 @@ async def clt(
     return SALARIO_CLT
 
 
-async def clt_salario(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-):
-    global msg_salario_clt
-    msg_salario_clt = update.message.text
+async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        global msg_salario_clt
+        msg_salario_clt = float(update.message.text)
+    except ValueError:
+        await update.message.reply_text(
+            f"""
+    O valor informado não é válido!
+-> /start para ver os comandos de cálculos disponíveis
+            """
+        )
+        return ConversationHandler.END
 
     await update.message.reply_text(
         f"""
     Certo, sua renda mensal era de \
-{currency(float(msg_salario_clt), grouping=True) if msg_salario_clt.isnumeric() else f"{msg_salario_clt}"}!
+    {currency(msg_salario_clt, grouping=True)}!
 
     Agora, digite a quantidade de dependentes.
         """
@@ -121,9 +126,7 @@ async def clt_salario(
     return QTD_CLT
 
 
-async def clt_quantidade(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def clt_quantidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global msg_quantidade_clt
     msg_quantidade_clt = update.message.text
 
@@ -139,9 +142,7 @@ async def clt_quantidade(
     return DATA_CLT
 
 
-async def clt_data(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def clt_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global msg_data_clt
     msg_data_clt = update.message.text.split()
 
@@ -156,9 +157,7 @@ async def clt_data(
     return FERIAS_CLT
 
 
-async def clt_ferias(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def clt_ferias(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global msg_ferias_clt
     msg_ferias_clt = update.message.text
 
@@ -172,9 +171,7 @@ async def clt_ferias(
     return DEMISSAO_CLT
 
 
-async def clt_demissao(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def clt_demissao(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global msg_demissao_clt
     msg_demissao_clt = update.message.text
 
@@ -182,16 +179,38 @@ async def clt_demissao(
         f"""
     Então sua resposta é {msg_demissao_clt}.
 
-    Ok, até a próxima.
+    Estou pronto para realizar o cálculo.
+
+    Digite 'sim' para visualizar.
         """
     )
+    return CALCULO_CLT
+
+
+async def calculo_clt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    msg_resp = update.message.text
+
+    if msg_resp.lower()[0] == 's':
+        saldo_salario = (msg_salario_clt / 30) * (int(msg_data_clt[1][:2]))
+        await update.message.reply_text(
+            f"""
+        {saldo_salario}
+            """
+        )
+    else:
+        await update.message.reply_text(
+            f"""
+    O valor informado não é válido!
+-> /start para ver os comandos de cálculos disponíveis
+            """
+        )
+        return ConversationHandler.END
+
     return ConversationHandler.END
 
 
 # Função para cálculo da contribuição do INSS
-async def inss(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> int:
+async def inss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
     Essa função serve para inicializar as outras funções que vão receber
     as mensagens do usuário para assim conseguir realizar o cálculo
@@ -217,9 +236,7 @@ async def inss(
 
 
 # Função para mensagem aleatória do usuário
-async def text(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> None:
+async def text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Essa função retorna uma simples mensagem caso o usuário envie
     mensagens aleatórias.
@@ -236,9 +253,7 @@ async def text(
 
 
 # Função para parar os cálculos
-async def cancel(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> int:
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
     Essa função serve para cancelar qualquer cálculo que esteja sendo
     realizado, caso o usuário não queira mais realizar o cálculo.

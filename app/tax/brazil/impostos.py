@@ -16,20 +16,18 @@ async def calculo_imposto_de_renda(
         int: Essa função vai retornar um inteiro, a qual se refere a uma
         constante que serve para encerrar uma conversa.
     """
-    user = update.message.text
+    salario = update.message.text
     await update.message.reply_text(
         f"""
     Entendi, então sua renda é \
-{currency(float(user), grouping=True) if user.isnumeric() else f"{user}"}
+{currency(float(salario), grouping=True) if salario.isnumeric() else f"{salario}"}
     """
     )
 
     return ConversationHandler.END
 
 
-async def calculo_inss(
-        update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def calculo_inss(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Essa função está recebendo a mensagem do usuário a qual foi passada na
     função 'inss'. A função irá retornar o valor para pagamento
@@ -42,9 +40,9 @@ async def calculo_inss(
         int: Essa função vai retornar um inteiro, a qual se refere a uma
         constante que serve para encerrar uma conversa.
     """
-    user = update.message.text
+    contrib = update.message.text  # Contribuição
     try:
-        user = float(user)
+        contrib = float(contrib)
     except ValueError:
         await update.message.reply_text(
             f"""
@@ -55,22 +53,22 @@ async def calculo_inss(
         return ConversationHandler.END
     porcentual_inss = 0.075
     user_ceil = 7_087.22
-    if user <= 1_212.00:
+    if contrib <= 1_212.00:
         porcentual_inss = 0.075
-    elif 1_212.01 <= user < 2_427.35:
+    elif 1_212.01 <= contrib < 2_427.35:
         porcentual_inss = 0.09
-    elif 2_427.36 <= user < 3_641.03:
+    elif 2_427.36 <= contrib < 3_641.03:
         porcentual_inss = 0.12
-    elif user >= 3_641.04:
+    elif contrib >= 3_641.04:
         porcentual_inss = 0.14
-    if user > user_ceil:
+    if contrib > user_ceil:
         contrib_inss = user_ceil * porcentual_inss
     else:
-        contrib_inss = user * porcentual_inss
+        contrib_inss = contrib * porcentual_inss
 
     await update.message.reply_text(
         f"""
-    Entendi, com sua renda de {currency(user, grouping=True)} \
+    Entendi, com sua renda de {currency(contrib, grouping=True)} \
 a sua contribuição será de {currency(contrib_inss, grouping=True)}
     """
     )
