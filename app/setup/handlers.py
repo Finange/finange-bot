@@ -5,6 +5,7 @@ from telegram.ext import (
     filters
 )
 
+from app.tax.brazil.impostos import calculo_clt
 from app.setup.core import (
     CALCULO_CLT,
     DATA_CLT,
@@ -13,7 +14,6 @@ from app.setup.core import (
     QTD_CLT,
     RENDA,
     SALARIO_CLT,
-    calculo_clt,
     cancel,
     clt,
     clt_data,
@@ -32,7 +32,7 @@ conv_renda_handler = ConversationHandler(
     states={
         RENDA: [
             MessageHandler(
-                filters.TEXT & ~filters.COMMAND, calculo_imposto_de_renda
+                filters.TEXT & (~filters.COMMAND), calculo_imposto_de_renda
             )
         ]
     },
@@ -44,20 +44,20 @@ conv_clt_handler = ConversationHandler(
     entry_points=[CommandHandler('clt', clt)],
     states={
         SALARIO_CLT: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, clt_salario)
+            MessageHandler(filters.TEXT & (~filters.COMMAND), clt_salario)
         ],
         QTD_CLT: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, clt_quantidade)
+            MessageHandler(filters.TEXT & (~filters.COMMAND), clt_quantidade)
         ],
-        DATA_CLT: [MessageHandler(filters.TEXT & ~filters.COMMAND, clt_data)],
+        DATA_CLT: [MessageHandler(filters.TEXT & (~filters.COMMAND), clt_data)],
         FERIAS_CLT: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, clt_ferias)
+            MessageHandler(filters.TEXT & (~filters.COMMAND), clt_ferias)
         ],
         DEMISSAO_CLT: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, clt_demissao)
+            MessageHandler(filters.TEXT & (~filters.COMMAND), clt_demissao)
         ],
         CALCULO_CLT: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_clt)
+            MessageHandler(filters.TEXT & (~filters.COMMAND), calculo_clt)
         ],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
@@ -67,7 +67,7 @@ conv_clt_handler = ConversationHandler(
 conv_inss_handler = ConversationHandler(
     entry_points=[CommandHandler('inss', inss)],
     states={
-        RENDA: [MessageHandler(filters.TEXT & ~filters.COMMAND, calculo_inss)]
+        RENDA: [MessageHandler(filters.TEXT & (~filters.COMMAND), calculo_inss)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
