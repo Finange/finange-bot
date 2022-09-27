@@ -1,8 +1,9 @@
 from locale import LC_ALL, setlocale
 from os import environ
-
+from sys import exit
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram.error import InvalidToken
 
 from app.setup.core import start, text
 from app.setup.handlers import (
@@ -12,8 +13,10 @@ from app.setup.handlers import (
 )
 
 load_dotenv()
-
+#Verifica se o TOKEN existe.
 TOKEN = environ.get('TOKEN')
+if TOKEN == None:
+    exit("Adicione seu TOKEN na variável de ambiente do sistema, ou no arquivo '.env'.\nLeia a documentação para mais detalhes: https://github.com/Finange/finange-bot/blob/main/README.md")
 
 
 def main() -> None:
@@ -25,7 +28,10 @@ def main() -> None:
     setlocale(LC_ALL, 'pt_BR.UTF-8')
 
     # Cria a aplicação e passa pro token do bot
-    app = Application.builder().token(TOKEN).build()
+    try:
+        app = Application.builder().token(TOKEN).build()
+    except InvalidToken:
+        exit("Token inválido, utilize um TOKEN passado pelo @BotFather.\nLeia a documentação para mais detalhes: https://github.com/Finange/finange-bot/blob/main/README.md")
 
     # Comandos
 
