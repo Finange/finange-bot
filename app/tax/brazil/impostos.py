@@ -27,6 +27,60 @@ async def calculo_imposto_de_renda(
     return ConversationHandler.END
 
 
+async def calculo_clt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Essa função recebe todos os dados de cada state do cálculo CLT e
+    realiza o cálculo segundo as condições informadas pelo usuário"""
+    try:
+        msg_resp = update.message.text.lower()[0]
+        if msg_resp != 's' and msg_resp != 'n':
+            raise ValueError
+    except ValueError:
+        await update.message.reply_text(
+            f"""
+                A reposta não é válida!
+            -> /start para ver os comandos de cálculos disponíveis
+                        """
+        )
+        return ConversationHandler.END
+    msg_resp = update.message.text
+
+    msg_salario_clt = context.user_data['msg_salario_clt']
+    msg_data_inicial = context.user_data['msg_data_inicial']
+    msg_data_final = context.user_data['msg_data_final']
+
+    if msg_resp.lower()[0] == 's':
+        saldo_salario = (msg_salario_clt / 30) * (int(msg_data_final.strftime('%d')))
+        await update.message.reply_text(
+            f"""
+        {currency(saldo_salario, grouping=True)}
+        
+        Finalizamos o seu cálculo.
+                
+    -> /start para ver os comandos de cálculos disponíveis
+            """
+        )
+    else:
+        if msg_resp.lower()[0] == 'n':
+            await update.message.reply_text(
+                f"""
+                Ok, vamos parar por aqui!
+                
+        -> /start para ver os comandos de cálculos disponíveis
+                        """
+            )
+            return ConversationHandler.END
+        else:
+            await update.message.reply_text(
+                f"""
+        O valor informado não é válido!
+    -> /start para ver os comandos de cálculos disponíveis
+                """
+            )
+            return ConversationHandler.END
+
+    return ConversationHandler.END
+
+
 async def calculo_inss(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Essa função está recebendo a mensagem do usuário a qual foi passada na

@@ -1,4 +1,5 @@
 from locale import currency
+from datetime import date
 
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
@@ -75,14 +76,6 @@ async def renda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return RENDA
 
 
-msg_salario_clt, msg_quantidade_clt, msg_data_clt, msg_demissao_clt = (
-    None,
-    None,
-    None,
-    None,
-)
-
-
 # Funções para o cálculo da rescisão do CLT
 async def clt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
@@ -103,9 +96,12 @@ async def clt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Essa função recebe o valor do salário passado no state anterior do handler
+    e em seguida pergunta a quantidade de dependentes"""
     try:
-        global msg_salario_clt
         msg_salario_clt = float(update.message.text)
+        if float(msg_salario_clt) <= 0:
+            raise ValueError
     except ValueError:
         await update.message.reply_text(
             f"""
@@ -114,21 +110,37 @@ async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
             """
         )
         return ConversationHandler.END
+    context.user_data['msg_salario_clt'] = msg_salario_clt
 
     await update.message.reply_text(
         f"""
     Certo, sua renda mensal era de \
-    {currency(msg_salario_clt, grouping=True)}!
+{currency(msg_salario_clt, grouping=True)}!
 
     Agora, digite a quantidade de dependentes.
+    
+Digite /cancel caso queira parar o cálculo.
         """
     )
     return QTD_CLT
 
 
 async def clt_quantidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global msg_quantidade_clt
-    msg_quantidade_clt = update.message.text
+    """Essa função recebe a quantidade de dependentes para o cálculo da clt e o armazena
+    e em seguida pergunta sobre a data de ínicio e fim do contrato"""
+    try:
+        msg_quantidade_clt = int(update.message.text)
+        if msg_quantidade_clt < 0 or msg_quantidade_clt > 20:
+            raise ValueError
+    except ValueError:
+        await update.message.reply_text(
+            f"""
+        O valor informado não é válido!
+    -> /start para ver os comandos de cálculos disponíveis
+                """
+        )
+        return ConversationHandler.END
+    context.user_data['msg_quantidade_clt'] = msg_quantidade_clt
 
     await update.message.reply_text(
         f"""
@@ -136,77 +148,112 @@ async def clt_quantidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     Digite agora de início e fim do contrato.
 
-    Exemplo: 01/03/2014 17/08/2017
+    Exemplo: 01-03-2014 17-08-2017
+
+ Digite /cancel caso queira parar o cálculo.
         """
     )
     return DATA_CLT
 
 
 async def clt_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global msg_data_clt
-    msg_data_clt = update.message.text.split()
+    """Essa função recebe e valida as datas informadas no state anterior
+    para o cálculo da clt e a armazena; em seguida pergunta se houveram férias
+    durante o período de usuário"""
+    try:
+        msg_data_clt = update.message.text.split(' ')
+
+        dia_inicial, mes_inicial, ano_inicial = map(int, msg_data_clt[0].split('-'))
+        dia_final, mes_final, ano_final = map(int, msg_data_clt[1].split('-'))
+
+        msg_data_inicial = date(year=ano_inicial, month=mes_inicial, day=dia_inicial)
+        msg_data_final = date(year=ano_final, month=mes_final, day=dia_final)
+    except [ValueError, TypeError]:
+        await update.message.reply_text(
+            f"""
+        A data informada não é válida!
+    -> /start para ver os comandos de cálculos disponíveis
+                """
+        )
+        return ConversationHandler.END
+    context.user_data['msg_data_inicial'] = msg_data_inicial
+    context.user_data['msg_data_final'] = msg_data_final
 
     await update.message.reply_text(
         f"""
     Certo, agora eu vou fazer algumas perguntas de sim ou não.
 
-    Você tirou féridas entre o perído de
-    {msg_data_clt[0]} até {msg_data_clt[1]}?
+    Você tirou férias entre
+    {msg_data_inicial.strftime('%d de %B de %Y')} e {msg_data_final.strftime('%d de %B de %Y')}?
+ 
+ Digite /cancel caso queira parar o cálculo.
         """
     )
     return FERIAS_CLT
 
 
 async def clt_ferias(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global msg_ferias_clt
-    msg_ferias_clt = update.message.text
+    """Essa função recebe se houve férias ou não do state anterior
+        para o cálculo da clt e armazena essa informação; em seguida
+        pergunta se o usuário havia pedido demissão ou não"""
+    try:
+        msg_ferias_clt = update.message.text.lower()[0]
+        if msg_ferias_clt != 's' and msg_ferias_clt != 'n':
+            raise ValueError
+    except ValueError:
+        await update.message.reply_text(
+            f"""
+                A resposta não é válida!
+            -> /start para ver os comandos de cálculos disponíveis
+                        """
+        )
+        return ConversationHandler.END
+
+    context.user_data['msg_ferias_clt'] = msg_ferias_clt
 
     await update.message.reply_text(
         f"""
-    Então sua resposta é {msg_ferias_clt}.
+    Então sua resposta é {'sim' if msg_ferias_clt == 's' else 'não'}.
 
     Você pediu demissão?
+
+ Digite /cancel caso queira parar o cálculo.
         """
     )
     return DEMISSAO_CLT
 
 
 async def clt_demissao(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global msg_demissao_clt
-    msg_demissao_clt = update.message.text
+    """Essa função recebe se houve um pedido de demissão ou não do state anterior
+    para o cálculo da clt e armazena essa informação; em seguida
+    pergunta se o usuário quer realizar o cálculo"""
+    try:
+        msg_demissao_clt = update.message.text.lower()[0]
+        if msg_demissao_clt != 's' and msg_demissao_clt != 'n':
+            raise ValueError
+    except ValueError:
+        await update.message.reply_text(
+            f"""
+                A resposta não é válida!
+            -> /start para ver os comandos de cálculos disponíveis
+                        """
+        )
+        return ConversationHandler.END
+
+    context.user_data['msg_demissao_clt'] = msg_demissao_clt
 
     await update.message.reply_text(
         f"""
-    Então sua resposta é {msg_demissao_clt}.
+    Então sua resposta é {'sim' if msg_demissao_clt == 's' else 'não'}.
 
     Estou pronto para realizar o cálculo.
 
     Digite 'sim' para visualizar.
+
+ Digite /cancel ou 'não' caso queira parar o cálculo.
         """
     )
     return CALCULO_CLT
-
-
-async def calculo_clt(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    msg_resp = update.message.text
-
-    if msg_resp.lower()[0] == 's':
-        saldo_salario = (msg_salario_clt / 30) * (int(msg_data_clt[1][:2]))
-        await update.message.reply_text(
-            f"""
-        {saldo_salario}
-            """
-        )
-    else:
-        await update.message.reply_text(
-            f"""
-    O valor informado não é válido!
--> /start para ver os comandos de cálculos disponíveis
-            """
-        )
-        return ConversationHandler.END
-
-    return ConversationHandler.END
 
 
 # Função para cálculo da contribuição do INSS

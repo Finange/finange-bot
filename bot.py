@@ -38,7 +38,7 @@ def main() -> None:
     # Comando para adicionar o handler da contribuição do INSS
     app.add_handler(conv_inss_handler)
     # Resposta para texto do user
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text))
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), text))
 
     # Começa o bot
     app.run_polling()
