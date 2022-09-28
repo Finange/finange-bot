@@ -2,8 +2,8 @@
 
 ## Como Contribuir
 
-> Antes de continuar a leitura, para ter **acesso à documentação completa** do projeto, **links** dos 
-> repositórios do Front-End e Back-End (este que você está agora é parte do Back-End, contando 
+> Antes de continuar a leitura, para ter **acesso à documentação completa** do projeto, **links** dos
+> repositórios do Front-End e Back-End (este que você está agora é parte do Back-End, contando
 > com o repo da API) e um **passo a passo** para contribuir, você pode acessar os dois links
 > abaixo:
 >
@@ -22,12 +22,12 @@ Agora que você já criou seu Bot, você vai precisar adicionar o Token em um ar
 
 > 1. Crie um arquivo .env no diretório do projeto.
 > 2. Adicione a seguinte linha de comando no arquivo.env e cole seu token dentro das aspas:
-> 
+>
 >    ```TOKEN='<seu-token-do-bot>'```
 > 3. Agora é só rodar o bot.py
 
 
-E dessa forma, você já consegue testar todo nosso código dentro da sua máquina, com seu Bot de simulação. 
+E dessa forma, você já consegue testar todo nosso código dentro da sua máquina, com seu Bot de simulação.
 
 Próxima etapa, você vai instalar o `poetry` na sua máquina usando esse <a href="https://python-poetry.org/docs/">link</a>!
 

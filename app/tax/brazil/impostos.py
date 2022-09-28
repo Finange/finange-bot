@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from locale import currency
 
 from telegram import Update
@@ -53,9 +54,9 @@ async def calculo_clt(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             f"""
         {currency(saldo_salario, grouping=True)}
-        
+
         Finalizamos o seu cálculo.
-                
+
     -> /start para ver os comandos de cálculos disponíveis
             """
         )
@@ -64,7 +65,7 @@ async def calculo_clt(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(
                 f"""
                 Ok, vamos parar por aqui!
-                
+
         -> /start para ver os comandos de cálculos disponíveis
                         """
             )
