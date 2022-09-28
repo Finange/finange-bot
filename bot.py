@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from locale import LC_ALL, setlocale
 from os import environ
 from sys import exit
@@ -31,7 +32,7 @@ def main() -> None:
     try:
         app = Application.builder().token(TOKEN).build()
     except InvalidToken:
-        exit("Token inválido, utilize um TOKEN passado pelo @BotFather.\nLeia a documentação para mais detalhes: https://github.com/Finange/finange-bot/blob/main/README.md")
+        exit('Token inválido, utilize um TOKEN passado pelo @BotFather.\nLeia a documentação para mais detalhes: https://github.com/Finange/finange-bot/blob/main/README.md')
 
     # Comandos
 

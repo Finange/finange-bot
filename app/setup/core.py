@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from locale import currency
 from datetime import date
 
@@ -118,7 +119,7 @@ async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
 {currency(msg_salario_clt, grouping=True)}!
 
     Agora, digite a quantidade de dependentes.
-    
+
 Digite /cancel caso queira parar o cálculo.
         """
     )
@@ -185,7 +186,7 @@ async def clt_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     Você tirou férias entre
     {msg_data_inicial.strftime('%d de %B de %Y')} e {msg_data_final.strftime('%d de %B de %Y')}?
- 
+
  Digite /cancel caso queira parar o cálculo.
         """
     )
