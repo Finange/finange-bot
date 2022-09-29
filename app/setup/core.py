@@ -118,7 +118,7 @@ async def clt_salario(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Certo, sua renda mensal era de \
 {currency(msg_salario_clt, grouping=True)}!
 
-    Agora, digite a quantidade de dependentes.
+    Agora, digite a quantidade de pessoas que dependem da sua renda.
 
 Digite /cancel caso queira parar o cálculo.
         """
@@ -141,7 +141,9 @@ async def clt_quantidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 """
         )
         return ConversationHandler.END
-    context.user_data['msg_quantidade_clt'] = msg_quantidade_clt
+
+    # Multiplica o valor descontado por dependentes pelo quantidade de dependentes
+    context.user_data['msg_quantidade_clt'] = msg_quantidade_clt * 189.59
 
     await update.message.reply_text(
         f"""
@@ -211,6 +213,18 @@ async def clt_ferias(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     context.user_data['msg_ferias_clt'] = msg_ferias_clt
+
+    """if msg_ferias_clt == 's':
+        anos_trabalho = abs(int((context.user_data['msg_data_inicial'] - context.user_data['msg_data_final']).days / 365.2425))
+    
+        if anos_trabalho >= 1:
+            um_terco = float(context.user_data['msg_salario_clt'] / 3)
+            salario_ferias = float(context.user_data['msg_salario_clt'] + um_terco)
+        else:
+            valor_mensal = float(context.user_data['msg_salario_clt'] / 12)
+            
+    else:
+        pass"""
 
     await update.message.reply_text(
         f"""
